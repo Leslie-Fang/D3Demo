@@ -1,1 +1,1 @@
-# trading
+## Cropto-currency Trading Strategy
