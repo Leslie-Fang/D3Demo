@@ -3,12 +3,29 @@ dbpath: ~/data/db
 run: mongod --dbpath ~/data/db
 '''
 import pymongo
-from ..config  import dbConfig
-import datetime
+import json
+from config import dbConfig
 
-client = pymongo.MongoClient(dbConfig['url'], dbConfig['port'])
-db = client['quant']
-collection = db['tradeHistoryData']
+def getHistoryData():
+    client = pymongo.MongoClient(dbConfig['url'], dbConfig['port'])
+    db = client['quant']
+    collection = db['tradeHistoryData']
+    lines = collection.find()
+    data = {}
+    dataCount = 1
+    for line in lines:
+        #format the date to this format:  Thu Aug 31 2017 20:04:03
+        dataRecord = line['date'].strip().split('.')[0].strip()
+        data[dataCount] = {'date':dataRecord,'tradePair':line['MarketCurrency']+'/'+line['BaseCurrency'],'price':line['price']}
+        dataCount = dataCount + 1
+    client.close()
+    ret = json.dumps(data)
+    print ret
+    return ret
+
+
+if __name__ == "__main__":
+    getHistoryData()
 
 
 
