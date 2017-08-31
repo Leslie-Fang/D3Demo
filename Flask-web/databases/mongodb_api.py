@@ -15,8 +15,9 @@ def getHistoryData():
     dataCount = 1
     for line in lines:
         #format the date to this format:  Thu Aug 31 2017 20:04:03
-        dataRecord = line['date'].strip().split('.')[0].strip()
-        data[dataCount] = {'date':dataRecord,'tradePair':line['MarketCurrency']+'/'+line['BaseCurrency'],'price':line['price']}
+        #dataRecord = line['date'].strip().split('.')[0].strip()
+        #data[dataCount] = {'date':line['date'],'tradePair':line['MarketCurrency']+'/'+line['BaseCurrency'],'price':line['price']}
+        data[dataCount] = {'date': line['date'],'price': line['price']}
         dataCount = dataCount + 1
     client.close()
     ret = json.dumps(data)

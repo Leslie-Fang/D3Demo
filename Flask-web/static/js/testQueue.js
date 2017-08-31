@@ -1,25 +1,10 @@
-var q = d3.queue()
-.defer(d3.request, "/getData")
-.defer(d3.request, "/test2")
-.await(function(error,results,results2) {
-  if (error) throw error;
-  console.log(results);
-  console.log(results2);
-  output(results.responseText);
-});
-
-function output(data){
-    console.log(data);
-    console.log(new Date);
-    //var parseTime = d3.timeParse("%B %d, %Y");
-    console.log(parseTime("June 30, 2015"));
-}
-
 var svg = d3.select("svg"),
     margin = {top: 20, right: 20, bottom: 30, left: 50},
     width = +svg.attr("width") - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var parseTime = d3.timeParse("%d-%b-%y");
 
 var x = d3.scaleTime()
     .rangeRound([0, width]);
@@ -29,8 +14,47 @@ var y = d3.scaleLinear()
 
 var line = d3.line()
     .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.close); });
+    .y(function(d) { return y(d.price); });
 
+d3.json("/getData", function(error, data) {
+  if (error) throw error;
+  var i = 1
+  console.log(data)
+  while(data[i]){
+    data[i]['date'] = parseTime(data[i]['date']);
+    data[i]['price'] = +data[i]['price'];
+    i = i+1;
+    //console.log(data[i]);
+  }
+  console.log(data)
+  console.log(d3.min(data))
+  console.log(d3.extent(data, function(d) { return parseTime(d.date); }))
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+  y.domain(d3.extent(data, function(d) { return d.price; }));
 
+  g.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x))
+    .select(".domain")
+      .remove();
 
+  g.append("g")
+      .call(d3.axisLeft(y))
+    .append("text")
+      .attr("fill", "#000")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", "0.71em")
+      .attr("text-anchor", "end")
+      .text("Price ($)");
+
+  g.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-linejoin", "round")
+      .attr("stroke-linecap", "round")
+      .attr("stroke-width", 1.5)
+      .attr("d", line);
+});
 

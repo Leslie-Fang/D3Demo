@@ -14,17 +14,19 @@ var y = d3.scaleLinear()
 
 var line = d3.line()
     .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.close); });
+    .y(function(d) { return y(d.price); });
 
-d3.tsv("static/data.tsv", function(d) {
+d3.tsv("static/data2.tsv", function(d) {
   d.date = parseTime(d.date);
-  d.close = +d.close;
+  console.log(d.date)
+  d.price = +d.price;
   return d;
 }, function(error, data) {
   if (error) throw error;
-
+  console.log(data)
+  console.log(d3.extent(data, function(d) { return d.date; }))
   x.domain(d3.extent(data, function(d) { return d.date; }));
-  y.domain(d3.extent(data, function(d) { return d.close; }));
+  y.domain(d3.extent(data, function(d) { return d.price; }));
 
   g.append("g")
       .attr("transform", "translate(0," + height + ")")
