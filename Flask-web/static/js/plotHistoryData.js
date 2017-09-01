@@ -13,20 +13,15 @@ var y = d3.scaleLinear()
     .rangeRound([height, 0]);
 
 var line = d3.line()
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.price); });
+    .x(function(d) { return x(parseTime(d.date)); })
+    .y(function(d) { return y(+d.price); });
 
-d3.tsv("static/data2.tsv", function(d) {
-  d.date = parseTime(d.date);
-  console.log(d.date)
-  d.price = +d.price;
-  return d;
-}, function(error, data) {
+d3.json("/getData",function(error, data) {
   if (error) throw error;
-  console.log(data)
-  console.log(d3.extent(data, function(d) { return d.date; }))
-  x.domain(d3.extent(data, function(d) { return d.date; }));
-  y.domain(d3.extent(data, function(d) { return d.price; }));
+  console.log(data);
+  console.log(d3.extent(data, function(d) { return parseTime(d.date); }))
+  x.domain(d3.extent(data, function(d) { return parseTime(d.date); }));
+  y.domain(d3.extent(data, function(d) { return +d.price; }));
 
   g.append("g")
       .attr("transform", "translate(0," + height + ")")
