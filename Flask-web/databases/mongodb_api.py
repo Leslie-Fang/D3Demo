@@ -17,7 +17,6 @@ def getHistoryData():
         data.append({'date':line['date'],'tradePair':line['MarketCurrency']+'/'+line['BaseCurrency'],'price':line['price']})
         #data[dataCount] = {'date': line['date'],'price': line['price']}
     client.close()
-    #ret = json.dumps(data)
     print data
     return data
 
