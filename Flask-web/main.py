@@ -13,6 +13,10 @@ def hello_world():
 def showData():
     return render_template('showData.html')
 
+@app.route('/showDailyEvent')
+def showDailyEvent():
+    return render_template('showDailyEvent.html')
+
 @app.route('/getData')
 def getData():
     data = getHistoryData()
