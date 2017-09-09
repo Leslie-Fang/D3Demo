@@ -21,12 +21,15 @@ d3.json("/getData",function(error, data) {
   console.log(data);
   console.log(d3.extent(data, function(d) { return parseTime(d.date); }))
   x.domain(d3.extent(data, function(d) { return parseTime(d.date); }));
+  //+d.price, here use + would change the data type from string to int(float)
   y.domain(d3.extent(data, function(d) { return +d.price; }));
 
   g.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x))
     .select(".domain")
+      .append("text")
+      .attr("fill", "#000")
       .remove();
 
   g.append("g")
