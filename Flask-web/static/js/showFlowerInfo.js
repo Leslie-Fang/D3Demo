@@ -24,9 +24,16 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.tsv("/static/data/flowerData.csv", function(error, data) {
+var format = function(d){
+    //+ used to change the data from string to digit(int, float)
+    d.sepalLength = +d.sepalLength;
+    return d;
+}
+
+d3.tsv("/static/data/flowerData.csv", format, function(error, data) {
   if (error) throw error;
 
+//here foreach functions as the same of format function
   data.forEach(function(d) {
     d.sepalLength = +d.sepalLength;
     d.sepalWidth = +d.sepalWidth;
