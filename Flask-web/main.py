@@ -17,6 +17,10 @@ def showData():
 def showDailyEvent():
     return render_template('showDailyEvent.html')
 
+@app.route('/showFlowerInfo')
+def showFlowerInfo():
+    return render_template('showFlowerInfo.html')
+
 @app.route('/getData')
 def getData():
     data = getHistoryData()
