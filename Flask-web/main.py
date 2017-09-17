@@ -21,6 +21,10 @@ def showDailyEvent():
 def showFlowerInfo():
     return render_template('showFlowerInfo.html')
 
+@app.route('/showMnistResult')
+def showMnistResult():
+    return render_template('showMnistResult.html')
+
 @app.route('/getData')
 def getData():
     data = getHistoryData()
