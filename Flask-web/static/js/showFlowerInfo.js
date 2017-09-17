@@ -30,9 +30,9 @@ var format = function(d){
     return d;
 }
 
-d3.tsv("/static/data/flowerData.csv", format, function(error, data) {
+d3.tsv("/static/data/flowerData.tsv", format, function(error, data) {
   if (error) throw error;
-
+//    console.log(data);
 //here foreach functions as the same of format function
   data.forEach(function(d) {
     d.sepalLength = +d.sepalLength;
